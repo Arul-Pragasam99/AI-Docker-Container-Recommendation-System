@@ -54,7 +54,7 @@ export default function RecommendPage() {
         </p>
       </div>
 
-      <div className="recommend-layout">
+      <div className={`recommend-layout${result ? "" : " no-result"}`}>
         <Card className="form-card">
           <div className="form-group">
             <Label>Project type</Label>

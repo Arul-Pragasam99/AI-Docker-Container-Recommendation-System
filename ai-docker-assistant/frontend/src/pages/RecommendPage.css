@@ -17,6 +17,13 @@
   align-items: start;
 }
 
+.recommend-layout.no-result {
+  grid-template-columns: 1fr;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+
 @media (max-width: 768px) {
   .recommend-layout { grid-template-columns: 1fr; }
 }
