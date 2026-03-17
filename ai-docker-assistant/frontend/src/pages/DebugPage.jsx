@@ -7,38 +7,14 @@ import {
 import "./DebugPage.css";
 
 const EXAMPLE_LOGS = [
-  {
-    label: "OOM kill",
-    log: "OOMKilled: container exceeded memory limit of 512Mi\nKilled process 1234 total-vm:1024000kB",
-  },
-  {
-    label: "Port conflict",
-    log: "Error starting userland proxy: listen tcp 0.0.0.0:8000: bind: address already in use",
-  },
-  {
-    label: "Connection refused",
-    log: "dial tcp 127.0.0.1:5432: connect: connection refused\nFailed to connect to database after 3 retries",
-  },
-  {
-    label: "Permission denied",
-    log: "open /var/run/docker.sock: permission denied\nError response from daemon: permission denied",
-  },
-  {
-    label: "Missing env var",
-    log: "KeyError: 'DATABASE_URL'\nTraceback (most recent call last):\n  File 'app/db.py', line 12",
-  },
-  {
-    label: "Disk full",
-    log: "write /var/lib/docker/overlay2/abc123/diff/tmp: no space left on device",
-  },
-  {
-    label: "SSL error",
-    log: "ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate",
-  },
-  {
-    label: "Exit code 1",
-    log: "container exited with code 1\nModuleNotFoundError: No module named 'uvicorn'",
-  },
+  { label: "OOM kill",           log: "OOMKilled: container exceeded memory limit of 512Mi\nKilled process 1234 total-vm:1024000kB" },
+  { label: "Port conflict",      log: "Error starting userland proxy: listen tcp 0.0.0.0:8000: bind: address already in use" },
+  { label: "Connection refused", log: "dial tcp 127.0.0.1:5432: connect: connection refused\nFailed to connect to database after 3 retries" },
+  { label: "Permission denied",  log: "open /var/run/docker.sock: permission denied\nError response from daemon: permission denied" },
+  { label: "Missing env var",    log: "KeyError: 'DATABASE_URL'\nTraceback (most recent call last):\n  File 'app/db.py', line 12" },
+  { label: "Disk full",          log: "write /var/lib/docker/overlay2/abc123/diff/tmp: no space left on device" },
+  { label: "SSL error",          log: "ssl.SSLCertVerificationError: certificate verify failed: unable to get local issuer certificate" },
+  { label: "Exit code 1",        log: "container exited with code 1\nModuleNotFoundError: No module named 'uvicorn'" },
 ];
 
 export default function DebugPage() {
@@ -64,15 +40,14 @@ export default function DebugPage() {
   return (
     <div className="page">
       <div className="page-title">
-        <h1>🔍 Log Debugger</h1>
+        <h1>Log Debugger</h1>
         <p className="muted">
-          Paste raw Docker logs and get instant root cause analysis,
-          severity rating, fix suggestions, and ready-to-run commands.
+          Paste raw Docker logs to get root cause analysis,
+          severity rating, fix suggestions, and commands.
         </p>
       </div>
 
       <div className="debug-layout">
-        {/* ── Input panel ────────────────────────────────────────────────── */}
         <div className="input-col">
           <Card>
             <div className="form-group">
@@ -91,7 +66,7 @@ export default function DebugPage() {
                 className="log-textarea"
                 value={logText}
                 onChange={(e) => setLogText(e.target.value)}
-                placeholder="Paste your Docker logs here…&#10;&#10;e.g.&#10;OOMKilled: container exceeded memory limit&#10;Error: listen EADDRINUSE :::3000"
+                placeholder={"Paste your Docker logs here...\n\ne.g.\nOOMKilled: container exceeded memory limit\nError: listen EADDRINUSE :::3000"}
                 rows={10}
               />
             </div>
@@ -110,9 +85,8 @@ export default function DebugPage() {
             </div>
           </Card>
 
-          {/* Example logs */}
           <Card>
-            <h3 className="section-heading">Try an example</h3>
+            <h3 className="section-heading">Examples</h3>
             <div className="examples-grid">
               {EXAMPLE_LOGS.map((ex) => (
                 <button
@@ -127,12 +101,9 @@ export default function DebugPage() {
           </Card>
         </div>
 
-        {/* ── Result panel ───────────────────────────────────────────────── */}
         {result && (
           <div className="result-col">
-
-            {/* Header */}
-            <Card className="result-header-card">
+            <Card>
               <div className="result-header">
                 <div>
                   <div className="field-label">Root cause</div>
@@ -140,45 +111,37 @@ export default function DebugPage() {
                 </div>
                 <SeverityBadge severity={result.severity} />
               </div>
-              <div style={{ marginTop: 14 }}>
+              <div style={{ marginTop: 16 }}>
                 <div className="field-label" style={{ marginBottom: 6 }}>Confidence</div>
                 <ConfidenceBar value={result.confidence} />
               </div>
             </Card>
 
-            {/* Fix suggestion */}
             <Card>
               <h3 className="section-heading">Fix suggestion</h3>
               <p className="fix-text">{result.fix_suggestion}</p>
             </Card>
 
-            {/* Explanation */}
             <Card>
               <h3 className="section-heading">Why this happens</h3>
               <p className="explanation-text">{result.explanation}</p>
             </Card>
 
-            {/* Commands */}
             <Card>
               <h3 className="section-heading">Commands to run</h3>
               <div className="commands-list">
-                {result.commands.map((cmd, i) => (
+                {result.commands.map((cmd, i) =>
                   cmd.startsWith("#")
                     ? <p key={i} className="cmd-comment">{cmd}</p>
                     : <CodeBlock key={i} code={cmd} language="bash" />
-                ))}
+                )}
               </div>
             </Card>
 
-            {/* Prevention tip */}
             <Card className="tip-card">
-              <span className="tip-icon">💡</span>
-              <div>
-                <div className="field-label" style={{ marginBottom: 4 }}>Prevention tip</div>
-                <p className="tip-text">{result.prevention_tip}</p>
-              </div>
+              <div className="field-label">Prevention tip</div>
+              <p className="tip-text">{result.prevention_tip}</p>
             </Card>
-
           </div>
         )}
       </div>

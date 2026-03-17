@@ -1,10 +1,18 @@
-.page { display: flex; flex-direction: column; gap: 24px; }
+.page { display: flex; flex-direction: column; gap: 28px; }
 
-.page-title h1 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+.page-title { border-bottom: 1px solid var(--border); padding-bottom: 20px; }
+
+.page-title h1 {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
 
 .recommend-layout {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 300px 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -13,18 +21,16 @@
   .recommend-layout { grid-template-columns: 1fr; }
 }
 
-/* ── Form card ───────────────────────────────────────────────────────────── */
 .form-card {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
   position: sticky;
-  top: 84px;
+  top: 76px;
 }
 
 .form-group { display: flex; flex-direction: column; gap: 6px; }
 
-/* Load presets */
 .presets {
   display: flex;
   flex-wrap: wrap;
@@ -33,50 +39,62 @@
 }
 
 .preset-btn {
-  background: var(--surface2);
+  background: transparent;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius);
   color: var(--muted);
-  font-size: 11px;
-  padding: 3px 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 9px;
   cursor: pointer;
-  transition: all 0.15s;
-  white-space: nowrap;
+  transition: all 0.12s;
+  letter-spacing: 0.02em;
 }
 
-.preset-btn:hover { border-color: var(--accent); color: var(--text); }
-.preset-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(37,99,235,.1); }
+.preset-btn:hover { border-color: var(--text); color: var(--text); }
+.preset-btn.active {
+  border-color: var(--text);
+  color: var(--inverse-text);
+  background: var(--inverse-bg);
+}
 
-/* ── Result column ───────────────────────────────────────────────────────── */
-.result-col { display: flex; flex-direction: column; gap: 16px; }
+.result-col { display: flex; flex-direction: column; gap: 14px; }
 
 .result-summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
 }
 
 .summary-item {
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 12px 14px;
+  padding: 14px 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
-.summary-value { font-size: 14px; font-weight: 600; }
-
-/* ── Section heading ─────────────────────────────────────────────────────── */
-.section-heading {
+.summary-value {
+  font-family: var(--mono);
   font-size: 13px;
   font-weight: 600;
-  margin-bottom: 14px;
   color: var(--text);
 }
 
-/* ── Param grid ──────────────────────────────────────────────────────────── */
+.section-heading {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
 .param-grid { display: flex; flex-direction: column; gap: 10px; }
 
 .param-row {
@@ -85,19 +103,35 @@
   justify-content: space-between;
   gap: 12px;
   font-size: 12.5px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.param-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.param-row code {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text);
+  background: var(--surface2);
+  padding: 1px 6px;
+  border-radius: var(--radius);
 }
 
-.param-row code { font-family: var(--mono); font-size: 12px; color: var(--text); }
+.reasoning-text { font-size: 13px; line-height: 1.75; color: var(--muted); }
 
-/* ── Reasoning ───────────────────────────────────────────────────────────── */
-.reasoning-text { font-size: 13px; line-height: 1.7; color: var(--muted); }
-
-.alternatives { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.alternatives {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
 
 .alt-tag {
   background: var(--surface2);
   border: 1px solid var(--border);
-  border-radius: 4px;
+  border-radius: var(--radius);
+  font-family: var(--mono);
   font-size: 11px;
   padding: 2px 8px;
   color: var(--muted);

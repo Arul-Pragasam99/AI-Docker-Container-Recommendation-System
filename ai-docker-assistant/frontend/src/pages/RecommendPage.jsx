@@ -15,11 +15,11 @@ const PROJECT_TYPES = [
 ];
 
 const LOAD_PRESETS = [
-  { label: "Tiny  (< 500)",     value: 200    },
-  { label: "Small  (1–5k)",     value: 2000   },
-  { label: "Medium (5–25k)",    value: 10000  },
-  { label: "Large  (25–100k)",  value: 50000  },
-  { label: "XLarge (100k+)",    value: 200000 },
+  { label: "< 500",   value: 200    },
+  { label: "1–5k",    value: 2000   },
+  { label: "5–25k",   value: 10000  },
+  { label: "25–100k", value: 50000  },
+  { label: "100k+",   value: 200000 },
 ];
 
 export default function RecommendPage() {
@@ -47,15 +47,14 @@ export default function RecommendPage() {
   return (
     <div className="page">
       <div className="page-title">
-        <h1>📦 Image Recommender</h1>
+        <h1>Image Recommender</h1>
         <p className="muted">
-          Describe your project and expected load — get the optimal Docker base image,
+          Describe your project and expected load to get the optimal base image,
           Dockerfile, and runtime configuration.
         </p>
       </div>
 
       <div className="recommend-layout">
-        {/* ── Form ───────────────────────────────────────────────────────── */}
         <Card className="form-card">
           <div className="form-group">
             <Label>Project type</Label>
@@ -102,11 +101,8 @@ export default function RecommendPage() {
           </Button>
         </Card>
 
-        {/* ── Result ─────────────────────────────────────────────────────── */}
         {result && (
           <div className="result-col">
-
-            {/* Summary row */}
             <div className="result-summary">
               <div className="summary-item">
                 <span className="field-label">Base image</span>
@@ -126,13 +122,12 @@ export default function RecommendPage() {
               </div>
             </div>
 
-            {/* Runtime params */}
             <Card>
               <h3 className="section-heading">Runtime parameters</h3>
               <div className="param-grid">
                 <div className="param-row">
                   <span className="muted">Restart policy</span>
-                  <Badge color="blue">{result.runtime_params.restart_policy}</Badge>
+                  <Badge color="default">{result.runtime_params.restart_policy}</Badge>
                 </div>
                 {result.runtime_params.env_vars.map((v) => (
                   <div className="param-row" key={v}>
@@ -142,26 +137,23 @@ export default function RecommendPage() {
                 ))}
                 {result.runtime_params.extra_flags.map((f) => (
                   <div className="param-row" key={f}>
-                    <span className="muted">Extra flag</span>
+                    <span className="muted">Flag</span>
                     <code className="mono">{f}</code>
                   </div>
                 ))}
               </div>
             </Card>
 
-            {/* docker run command */}
             <Card>
               <h3 className="section-heading">docker run command</h3>
               <CodeBlock code={result.docker_run_command} language="bash" />
             </Card>
 
-            {/* Dockerfile */}
             <Card>
               <h3 className="section-heading">Dockerfile</h3>
               <CodeBlock code={result.dockerfile_snippet} language="dockerfile" />
             </Card>
 
-            {/* Reasoning */}
             <Card>
               <h3 className="section-heading">Reasoning</h3>
               <p className="reasoning-text">{result.reasoning}</p>
@@ -174,7 +166,6 @@ export default function RecommendPage() {
                 </div>
               )}
             </Card>
-
           </div>
         )}
       </div>

@@ -4,8 +4,8 @@ import DebugPage from "./pages/DebugPage";
 import "./App.css";
 
 const TABS = [
-  { id: "recommend", label: "Image Recommender", icon: "📦" },
-  { id: "debug",     label: "Log Debugger",      icon: "🔍" },
+  { id: "recommend", label: "recommend" },
+  { id: "debug",     label: "debug" },
 ];
 
 export default function App() {
@@ -15,12 +15,9 @@ export default function App() {
     <div className="app">
       <header className="app-header">
         <div className="app-header-inner">
-          <div className="app-logo">
-            <span className="app-logo-icon">🐳</span>
-            <div>
-              <div className="app-logo-title">AI Docker Assistant</div>
-              <div className="app-logo-sub">Intelligent container recommendations &amp; log debugging</div>
-            </div>
+          <div>
+            <div className="app-logo-title">AI Docker Assistant</div>
+            <div className="app-logo-sub">container recommendations + log analysis</div>
           </div>
           <nav className="app-tabs">
             {TABS.map((t) => (
@@ -29,7 +26,6 @@ export default function App() {
                 className={`tab-btn${tab === t.id ? " active" : ""}`}
                 onClick={() => setTab(t.id)}
               >
-                <span>{t.icon}</span>
                 {t.label}
               </button>
             ))}
@@ -43,7 +39,7 @@ export default function App() {
       </main>
 
       <footer className="app-footer">
-        <span className="muted">AI Docker Assistant · FastAPI + Scikit-learn + React</span>
+        AI Docker Assistant 
       </footer>
     </div>
   );
