@@ -47,7 +47,7 @@ export default function DebugPage() {
         </p>
       </div>
 
-      <div className="debug-layout">
+      <div className={`debug-layout${result ? "" : " no-result"}`}>
         <div className="input-col">
           <Card>
             <div className="form-group">

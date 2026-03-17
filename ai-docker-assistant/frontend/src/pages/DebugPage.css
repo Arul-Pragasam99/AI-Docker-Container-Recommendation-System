@@ -5,6 +5,12 @@
   align-items: start;
 }
 
+.debug-layout.no-result {
+  grid-template-columns: 1fr;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
 @media (max-width: 900px) {
   .debug-layout { grid-template-columns: 1fr; }
 }
