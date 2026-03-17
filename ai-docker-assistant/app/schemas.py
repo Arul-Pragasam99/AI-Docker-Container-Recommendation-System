@@ -2,31 +2,29 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 
-# ── Recommendation ──────────────────────────────────────────────────────────
-
 class RecommendRequest(BaseModel):
     project_type: str = Field(
         ...,
-        example="fastapi",
         description=(
             "Type of project. Supported: fastapi, django, flask, node, react, "
             "nextjs, ml, postgres, redis, nginx, go, rust"
         ),
+        json_schema_extra={"example": "fastapi"}
     )
     expected_users: int = Field(
         ...,
         ge=1,
-        example=10000,
         description="Expected concurrent users",
+        json_schema_extra={"example": 10000}
     )
     language: Optional[str] = Field(
         None,
-        example="python",
         description="Primary language (auto-detected if omitted)",
+        json_schema_extra={"example": "python"}
     )
     has_gpu: Optional[bool] = Field(
         False,
-        description="Whether the workload requires GPU (relevant for ml projects)",
+        description="Whether the workload requires GPU (relevant for ml projects)"
     )
 
 
@@ -48,30 +46,34 @@ class RecommendResponse(BaseModel):
     alternatives: list[str]
 
 
-# ── Debugging ────────────────────────────────────────────────────────────────
-
 class DebugRequest(BaseModel):
     log_text: str = Field(
         ...,
         min_length=10,
-        example="OOMKilled: container exceeded memory limit of 512Mi",
         description="Raw Docker log output to analyse",
+        json_schema_extra={
+            "example": "OOMKilled: container exceeded memory limit of 512Mi"
+        }
     )
-    container_name: Optional[str] = Field(None, example="my-api")
-    image_name: Optional[str] = Field(None, example="python:3.12-slim")
+    container_name: Optional[str] = Field(
+        None,
+        json_schema_extra={"example": "my-api"}
+    )
+    image_name: Optional[str] = Field(
+        None,
+        json_schema_extra={"example": "python:3.12-slim"}
+    )
 
 
 class DebugResponse(BaseModel):
     root_cause: str
     confidence: float
-    severity: str           # low | medium | high | critical
+    severity: str
     fix_suggestion: str
     commands: list[str]
     explanation: str
     prevention_tip: str
 
-
-# ── Health ───────────────────────────────────────────────────────────────────
 
 class HealthResponse(BaseModel):
     status: str
