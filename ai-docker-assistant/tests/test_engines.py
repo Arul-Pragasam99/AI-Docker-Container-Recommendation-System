@@ -7,16 +7,36 @@ import sys
 import os
 import types
 
-# ── Minimal stubs so tests run without FastAPI installed ──────────────────────
-for mod in ("fastapi", "fastapi.middleware", "fastapi.middleware.cors"):
-    m = types.ModuleType(mod)
-    m.APIRouter      = lambda *a, **kw: None
-    m.FastAPI        = lambda *a, **kw: None
-    m.HTTPException  = Exception
-    m.CORSMiddleware = lambda *a, **kw: None
-    sys.modules[mod] = m
+# ── Proper FastAPI stubs (Pylance-safe using setattr) ────────────────────────
+
+fastapi_stub = types.ModuleType("fastapi")
+
+class _Router:
+    def __init__(self, *a, **kw): pass
+
+class _App:
+    def __init__(self, *a, **kw): pass
+
+setattr(fastapi_stub, "APIRouter", _Router)
+setattr(fastapi_stub, "FastAPI", _App)
+setattr(fastapi_stub, "HTTPException", Exception)
+
+cors_stub = types.ModuleType("fastapi.middleware.cors")
+
+class _CORS:
+    def __init__(self, *a, **kw): pass
+
+setattr(cors_stub, "CORSMiddleware", _CORS)
+
+sys.modules["fastapi"] = fastapi_stub
+sys.modules["fastapi.middleware"] = types.ModuleType("fastapi.middleware")
+sys.modules["fastapi.middleware.cors"] = cors_stub
+
+# ── Path setup ───────────────────────────────────────────────────────────────
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
+# ── Imports ──────────────────────────────────────────────────────────────────
 
 from app.schemas import RecommendRequest, DebugRequest
 from app.engine.recommender import get_recommendation
@@ -30,9 +50,12 @@ from app.engine.debugger import analyse_logs
 class TestRecommender:
 
     def _req(self, project_type: str, users: int, gpu: bool = False) -> RecommendRequest:
-        return RecommendRequest(project_type=project_type, expected_users=users, has_gpu=gpu)
-
-    # Image selection
+        return RecommendRequest(
+            project_type=project_type,
+            expected_users=users,
+            has_gpu=gpu,
+            language=None
+        )
 
     def test_fastapi_small_load_uses_slim(self):
         r = get_recommendation(self._req("fastapi", 1000))
@@ -59,8 +82,6 @@ class TestRecommender:
         assert r.base_image is not None
         assert r.confidence < 0.70
 
-    # Runtime params
-
     def test_tiny_load_params(self):
         r = get_recommendation(self._req("fastapi", 100))
         assert r.runtime_params.memory == "256m"
@@ -78,8 +99,6 @@ class TestRecommender:
     def test_xlarge_load_params(self):
         r = get_recommendation(self._req("fastapi", 200_000))
         assert r.runtime_params.memory == "4g"
-
-    # Dockerfile content
 
     def test_dockerfile_contains_base_image(self):
         r = get_recommendation(self._req("fastapi", 1000))
@@ -101,8 +120,6 @@ class TestRecommender:
         r = get_recommendation(self._req("rust", 1000))
         assert "AS builder" in r.dockerfile_snippet
 
-    # docker run command
-
     def test_run_command_contains_memory_flag(self):
         r = get_recommendation(self._req("fastapi", 1000))
         assert "--memory" in r.docker_run_command
@@ -110,8 +127,6 @@ class TestRecommender:
     def test_run_command_contains_image(self):
         r = get_recommendation(self._req("fastapi", 1000))
         assert r.base_image in r.docker_run_command
-
-    # Alternatives
 
     def test_fastapi_has_alternatives(self):
         r = get_recommendation(self._req("fastapi", 1000))
@@ -125,9 +140,11 @@ class TestRecommender:
 class TestDebugger:
 
     def _req(self, log: str, container: str = "test-container") -> DebugRequest:
-        return DebugRequest(log_text=log, container_name=container)
-
-    # Root cause detection
+        return DebugRequest(
+            log_text=log,
+            container_name=container,
+            image_name=None
+        )
 
     def test_oom_detected(self):
         r = analyse_logs(self._req("OOMKilled: container exceeded memory limit of 512Mi"))
@@ -184,8 +201,6 @@ class TestDebugger:
         assert r.root_cause == "Unknown / unrecognised error"
         assert r.confidence < 0.50
 
-    # Confidence
-
     def test_known_error_has_high_confidence(self):
         r = analyse_logs(self._req("OOMKilled: container exceeded memory limit"))
         assert r.confidence >= 0.70
@@ -194,8 +209,6 @@ class TestDebugger:
         single = analyse_logs(self._req("OOMKilled"))
         multi  = analyse_logs(self._req("OOMKilled out of memory exceeded memory limit killed process"))
         assert multi.confidence >= single.confidence
-
-    # Response fields
 
     def test_response_contains_commands(self):
         r = analyse_logs(self._req("OOMKilled: exceeded memory"))
