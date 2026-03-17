@@ -1,0 +1,125 @@
+.debug-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .debug-layout { grid-template-columns: 1fr; }
+}
+
+/* ── Input column ────────────────────────────────────────────────────────── */
+.input-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 84px;
+}
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+
+.log-textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 10px 12px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.log-textarea:focus { border-color: var(--accent); }
+
+.form-actions { display: flex; gap: 8px; margin-top: 8px; }
+
+/* ── Examples ────────────────────────────────────────────────────────────── */
+.examples-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.example-btn {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 12px;
+  padding: 6px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s;
+}
+.example-btn:hover { border-color: var(--accent); color: var(--text); }
+
+/* ── Result column ───────────────────────────────────────────────────────── */
+.result-col { display: flex; flex-direction: column; gap: 16px; }
+
+/* Header card */
+.result-header-card {}
+
+.result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.root-cause-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.section-heading {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+/* Fix text */
+.fix-text {
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+/* Explanation */
+.explanation-text {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+/* Commands */
+.commands-list { display: flex; flex-direction: column; gap: 8px; }
+
+.cmd-comment {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--muted);
+  padding: 0 4px;
+}
+
+/* Tip card */
+.tip-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(37,99,235,.06);
+  border-color: rgba(37,99,235,.25);
+}
+
+.tip-icon { font-size: 20px; line-height: 1; margin-top: 2px; }
+
+.tip-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}

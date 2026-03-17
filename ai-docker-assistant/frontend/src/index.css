@@ -1,0 +1,41 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:         #0d1117;
+  --surface:    #161b22;
+  --surface2:   #1c2128;
+  --border:     #30363d;
+  --accent:     #2563eb;
+  --accent-dim: #1d4ed8;
+  --green:      #22c55e;
+  --yellow:     #eab308;
+  --orange:     #f97316;
+  --red:        #ef4444;
+  --text:       #e6edf3;
+  --muted:      #8b949e;
+  --mono:       "JetBrains Mono", "Fira Code", monospace;
+  --sans:       "Inter", system-ui, sans-serif;
+  --radius:     8px;
+  --radius-lg:  12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Utility */
+.mono { font-family: var(--mono); }
+.muted { color: var(--muted); }
+.text-green  { color: var(--green);  }
+.text-yellow { color: var(--yellow); }
+.text-orange { color: var(--orange); }
+.text-red    { color: var(--red);    }

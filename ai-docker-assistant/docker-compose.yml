@@ -1,0 +1,21 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    container_name: ai-docker-assistant
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app        # live-reload in development
+    environment:
+      - ENV=development
+      - USE_ML_MODEL=false           # set true after running ml/train_recommender.py
+      - USE_ML_CLASSIFIER=false      # set true after running ml/train_debugger.py
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
